@@ -438,10 +438,9 @@ def main(window, lessons):
     block_size = 96
     platform1 = create_platform(200, HEIGHT - block_size - 200, block_size, 5)
     platform2 = create_platform(800, HEIGHT - block_size - 350, block_size, 5)
-    player = Player(100, 100, 50, 50)
+    player = Player(600, HEIGHT - block_size - 90, 50, 50)
     fire = Fire(100, HEIGHT - block_size - 64, 16, 32)
     fire.on()
-    spike_head = SpikeHead(600, HEIGHT - block_size - 90, 50, 50)
     floor = [
         Block(i * block_size, HEIGHT - block_size, block_size)
         for i in range(-WIDTH // block_size, (WIDTH * 3) // block_size)
@@ -455,7 +454,6 @@ def main(window, lessons):
         fire,
         *platform1,
         *platform2,
-        spike_head,
         book,
     ]
 

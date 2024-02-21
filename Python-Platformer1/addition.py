@@ -1,26 +1,11 @@
 import pygame
-import screen_manager
 
 
 pygame.init()
-
-
-class AdditionScreen:
-    def __init__(self, window):
-        self.window = window
-
-    def run(self):
-        # Your addition screen logic here
-        pass
-
-    def reset(self):
-        # Reset the addition screen state if needed
-        pass
-
+import lessons
 
 # Game window dimensions
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 450
+SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 800
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Drag And Drop")
@@ -74,7 +59,9 @@ def check_buttons_on_green(numbers_on_green):
 
 def submit_answers(number, answer):
     if number == answer:
-        screen_manager.set_screen("main_level")
+        import main_level_copy
+
+        main_level_copy.main(screen, [lessons.ADDITION])
 
 
 def reset_box_positions(numbers_on_green):
