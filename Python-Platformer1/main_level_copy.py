@@ -85,7 +85,7 @@ class Book(pygame.sprite.Sprite):
                 )  # Rendering the text with black color
             self.rendered_text = rendered_lines
 
-    def draw(self, window, offset_x):
+    def draw(self, window, player):
         font = pygame.font.Font(None, 24)
         if self.is_zoomed:
             window.blit(
@@ -100,12 +100,21 @@ class Book(pygame.sprite.Sprite):
             zoom_out_text = font.render("Zoom Out", True, (0, 0, 0))
             window.blit(zoom_out_text, (zoom_out_button.x + 10, zoom_out_button.y + 15))
             try:
+                print("in")
                 # Draw the text on the book when zoomed in
+                text_x = 50  # Fixed X-coordinate for the text
+                text_y = 100  # Fixed Y-coordinate for the text
+
                 for i, line in enumerate(self.rendered_text):
-                    window.blit(line, (100, 40 + i * 25))  # Adjust position as needed
+                    window.blit(line, (text_x, text_y + i * 25))
+
                 # Draw navigation buttons
-                prev_button = pygame.Rect(50, 650, 100, 50)
-                next_button = pygame.Rect(850, 650, 100, 50)
+                prev_button = pygame.Rect(
+                    50, HEIGHT - 100, 100, 50
+                )  # Fixed position for the previous button
+                next_button = pygame.Rect(
+                    WIDTH - 150, HEIGHT - 100, 100, 50
+                )  # Fixed position for the next button
                 pygame.draw.rect(
                     window, (0, 255, 0), prev_button
                 )  # Green color for previous button
@@ -118,11 +127,11 @@ class Book(pygame.sprite.Sprite):
                 window.blit(prev_text, (prev_button.x + 20, prev_button.y + 15))
                 window.blit(next_text, (next_button.x + 20, next_button.y + 15))
 
-            except:
-                pass
+            except Exception as e:
+                print(f"Error: {e}")
 
         else:
-            window.blit(self.image_zoomed_out, (self.x - offset_x, self.y))
+            window.blit(self.image_zoomed_out, (self.x, self.y))
 
     def zoom_in(self):
         self.is_zoomed = True
@@ -133,9 +142,13 @@ class Book(pygame.sprite.Sprite):
 
     def handle_click(self, pos):
         if self.is_zoomed:
-            prev_button = pygame.Rect(50, 650, 100, 50)
-            next_button = pygame.Rect(850, 650, 100, 50)
+            # Define button positions relative to the book when zoomed in
+            book_x, book_y = 10, 10
+            prev_button = pygame.Rect(50, HEIGHT - 100, 100, 50)
+            next_button = pygame.Rect(WIDTH - 150, HEIGHT - 100, 100, 50)
             zoom_out_button = pygame.Rect(450, 650, 100, 50)
+
+            # Check if the click is inside any of the buttons
             if prev_button.collidepoint(pos):
                 self.prev_lesson()
             elif next_button.collidepoint(pos):
@@ -446,7 +459,6 @@ def main(window, lessons):
         for i in range(-WIDTH // block_size, (WIDTH * 3) // block_size)
     ]
     book = Book(WIDTH - 50, block_size + 50, 32, 32, lessons)  # Create a book object
-
     objects = [
         *floor,
         Block(0, HEIGHT - block_size * 2, block_size),
@@ -481,10 +493,8 @@ def main(window, lessons):
 
                     # Check if the mouse click is on the book object
                     if (
-                        book.x - offset_x
-                        < mouse_pos[0]
-                        < book.x - offset_x + book.width
-                        and book.y < mouse_pos[1] < book.y + book.height
+                        950 <= mouse_pos[0] <= 950 + book.width
+                        and 146 <= mouse_pos[1] <= 146 + book.height
                     ):
                         if book.is_zoomed:
                             book.zoom_out()

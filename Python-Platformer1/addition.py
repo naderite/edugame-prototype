@@ -61,7 +61,7 @@ def submit_answers(number, answer):
     if number == answer:
         import main_level_copy
 
-        main_level_copy.main(screen, [lessons.ADDITION])
+        main_level_copy.main(screen, [lessons.ADDITION, lessons.SUBTRACTION])
 
 
 def reset_box_positions(numbers_on_green):
